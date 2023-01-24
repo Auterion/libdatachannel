@@ -4,6 +4,21 @@ project(libdatachannel
 	LANGUAGES CXX)
 set(PROJECT_DESCRIPTION "C/C++ WebRTC network library featuring Data Channels, Media Transport, and WebSockets")
 
+
+# When cross compiling, we have issues locating OpenSSL::SSL so use this to set the target
+if( AUTERION_STANDALONE)
+# The following must be defined to find OpenSSL:
+# OPENSSL_ROOT_DIR 
+# OPENSSL_CRYPTO_LIBRARY ( crypto library file location )
+# OPENSSL_INCLUDE_DIR
+# CMAKE_TOOLCHAIN_FILE (for cross compiling  )
+
+add_library(OpenSSL::SSL UNKNOWN IMPORTED)
+set_target_properties(OpenSSL::SSL 
+       PROPERTIES IMPORTED_LOCATION "${OPENSSL_ROOT_DIR}/lib/libssl.a"
+)
+endif()
+
 # Options
 option(USE_GNUTLS "Use GnuTLS instead of OpenSSL" OFF)
 option(USE_NICE "Use libnice instead of libjuice" OFF)
